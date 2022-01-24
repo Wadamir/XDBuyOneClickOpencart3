@@ -1,0 +1,754 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-buyoneclick" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1 style="display:block;font-size: 20px;">{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-buyoneclick" class="form-horizontal">
+			{% if error_warning %}
+				<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+				</div>
+			{% endif %}
+			<ul class="nav nav-tabs" style="margin-bottom:0;">
+				<li class="active"><a href="#settings_main" data-toggle="tab">{{ settings_main }}</a></li>
+				<li><a href="#settings_sms" data-toggle="tab">{{ settings_sms }}</a></li>
+				<li><a href="#settings_analytics" data-toggle="tab">{{ settings_analytics }}</a></li>
+				<li><a href="#text_tab_help" data-toggle="tab">{{ text_tab_help }}</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="settings_main" class="tab-pane fade in active">
+					<div class="col-xs-12" style="background:#fff; border: 1px solid #ddd;border-top: none;">
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="input-name_field">{{ entry_name }}</label>
+							<div class="col-sm-10">
+								{% for language in languages %}
+									{% set cur_language_id = language.language_id %}
+									<div class="input-group">
+										<span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+										<input type="text" name="buyoneclick[name][{{cur_language_id}}]" placeholder="{{ entry_name }}" value="{{ buyoneclick.name[cur_language_id] is defined ? buyoneclick.name[cur_language_id] }}" id="input-name_field" class="form-control" />
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="input-note_field">{{ entry_note_field }}</label>
+							<div class="col-sm-10">
+								{% for language in languages %}
+									{% set cur_language_id = language.language_id %}
+									<div class="input-group">
+										<span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+										<input type="text" name="buyoneclick[note_field][{{cur_language_id}}]" placeholder="{{ entry_note_field }}" value="{{ buyoneclick.note_field[cur_language_id] is defined ? buyoneclick.note_field[cur_language_id] }}" id="input-note_field" class="form-control" />
+									</div>
+								{% endfor %}
+								<p>{{ note_field_tooltip }}</p>
+							</div>
+						</div>						
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="input-success_type">{{ entry_success_type }}</label>
+							<div class="col-sm-10">
+								<select name="buyoneclick[success_type]" id="input-success_type" class="form-control">
+									{% if buyoneclick.success_type is defined and buyoneclick.success_type != '1' %}
+										<option value="0" selected="selected">{{ success_type0 }}</option>
+										<option value="1">{{ success_type1 }}</option>
+									{% else %}
+										<option value="0">{{ success_type0 }}</option>
+										<option value="1" selected="selected">{{ success_type1 }}</option>
+									{% endif %}
+								</select>
+								<p class="hidden">{{ success_type_tooltip }}</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="input-success_field">{{ entry_success_field }}</label>
+							<div class="col-sm-10">
+								{% for language in languages %}
+									{% set cur_language_id = language.language_id %}
+									<div class="input-group">
+										<span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+										<input type="text" name="buyoneclick[success_field][{{cur_language_id}}]" placeholder="{{ entry_success_field }}" value="{{ buyoneclick.success_field[cur_language_id] is defined ? buyoneclick.success_field[cur_language_id] }}" id="input-success_field" class="form-control" />
+									</div>
+								{% endfor %}
+								<p>{{ success_field_tooltip }}</p>
+							</div>
+						</div>
+						<div class="form-group" style="border-top: 1px solid #ccc;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ field1_title }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[field1_status]" class="form-control">
+											{% if buyoneclick.field1_status == '1' %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="2">{{ field_required }}</option>
+											{% elseif buyoneclick.field1_status == '2' %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2" selected="selected">{{ field_required }}</option>
+											{% else %}
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2">{{ field_required }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ field2_title }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[field2_status]" class="form-control">
+											{% if buyoneclick.field2_status == '1' %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="2">{{ field_required }}</option>
+											{% elseif buyoneclick.field2_status == '2' %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2" selected="selected">{{ field_required }}</option>
+											{% else %}
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2">{{ field_required }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border: none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ field3_title }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[field3_status]" class="form-control">
+											{% if buyoneclick.field3_status == '1' %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="2">{{ field_required }}</option>
+											{% elseif buyoneclick.field3_status == '2' %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2" selected="selected">{{ field_required }}</option>
+											{% else %}
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2">{{ field_required }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ field4_title }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[field4_status]" class="form-control">
+											{% if buyoneclick.field4_status == '1' %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="2">{{ field_required }}</option>
+											{% elseif buyoneclick.field1_status == '2' %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2" selected="selected">{{ field_required }}</option>
+											{% else %}
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+												<option value="1">{{ text_enabled }}</option>
+												<option value="2">{{ field_required }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border: none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ entry_quantity_status }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[quantity]" class="form-control">
+											{% if buyoneclick.quantity %}
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="0">{{ text_disabled }}</option>
+											{% else %}
+												<option value="1">{{ text_enabled }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ entry_stock_status }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[stock_status]" class="form-control">
+											{% if buyoneclick.stock_status == '2' %}
+												<option value="0">{{ text_stock_status0 }}</option>
+												<option value="2" selected="selected">{{ text_stock_status2 }}</option>
+											{% else %}
+												<option value="0" selected="selected">{{ text_stock_status0 }}</option>
+												<option value="2">{{ text_stock_status2 }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>						
+						<div class="form-group" style="border: none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ entry_agree_status }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[agree_status]" class="form-control">
+											<option value="0">{{ text_disabled }}</option>
+											{% for information in informations %}
+												{% if information.information_id == buyoneclick.agree_status %}
+													<option value="{{ information.information_id }}" selected="selected">{{ information.title }}</option>
+												{% else %}
+													<option value="{{ information.information_id }}">{{ information.title }}</option>
+												{% endif %}
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12" style="display:none;">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ entry_cart_status }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[cart_status]" class="form-control">
+											{% if buyoneclick.cart_status %}
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="0">{{ text_disabled }}</option>
+											{% else %}
+												<option value="1">{{ text_enabled }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>							
+						</div>
+						<div class="form-group" style="border: none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ entry_validation_type }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[validation_type]" class="form-control">
+											{% if buyoneclick.validation_type == value_validation_type1 %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="{{ value_validation_type1 }}" selected="selected">{{ text_validation_type1 }}</option>
+												<option value="{{ value_validation_type2 }}">{{ text_validation_type2 }}</option>
+											{% elseif buyoneclick.validation_type == value_validation_type2 %}
+												<option value="0">{{ text_disabled }}</option>
+												<option value="{{ value_validation_type1 }}">{{ text_validation_type1 }}</option>
+												<option value="{{ value_validation_type2 }}" selected="selected">{{ text_validation_type2 }}</option>
+											{% else %}
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+												<option value="{{ value_validation_type1 }}">{{ text_validation_type1 }}</option>
+												<option value="{{ value_validation_type2 }}">{{ text_validation_type2 }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ entry_option_status }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[option_status]" class="form-control">
+											{% if buyoneclick.option_status == '2' %}
+												<option value="0">{{ text_option_status0 }}</option>
+												<option value="1">{{ text_option_status1 }}</option>
+												<option value="2" selected="selected">{{ text_option_status2 }}</option>
+											{% elseif buyoneclick.option_status == '1' %}
+												<option value="0">{{ text_option_status0 }}</option>
+												<option value="1" selected="selected">{{ text_option_status1 }}</option>
+												<option value="2">{{ text_option_status2 }}</option>
+											{% else %}
+												<option value="0" selected="selected">{{ text_option_status0 }}</option>
+												<option value="1">{{ text_option_status1 }}</option>
+												<option value="2">{{ text_option_status2 }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>							
+						</div>
+						<div class="form-group" style="border: none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label">{{ entry_style_status }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[style_status]" class="form-control">
+											{% if buyoneclick.style_status %}
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="0">{{ text_disabled }}</option>
+											{% else %}
+												<option value="1">{{ text_enabled }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+								</div>
+							</div>
+						</div>
+						<div class="row" style="border-top: 1px solid #ddd;">
+							<div class="col-sm-4 col-xs-12">
+								<p class="text-center h5" for="input-status_product"><strong>{{ entry_status_product }}</strong></p>
+							</div>
+							<div class="col-sm-4 col-xs-12">
+								<p class="text-center h5" for="input-status_category" style="padding-top:0px;"><strong>{{ entry_status_category }}</strong></p>
+							</div>
+							<div class="col-sm-4 col-xs-12">
+								<p class="text-center h5" for="input-status_module" style="padding-top:0px;"><strong>{{ entry_status_module }}</strong></p>
+							</div>
+						</div>
+						<div class="form-group" style="border-top: none; padding-top: 5px;">
+							<div class="col-sm-4 col-xs-12">
+								<select name="buyoneclick[status_product]" id="input-status_product" class="form-control">
+									{% if buyoneclick.status_product %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+									{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+									{% endif %}
+								</select>
+							</div>
+							<div class="col-sm-4 col-xs-12">
+								<select name="buyoneclick[status_category]" id="input-status_category" class="form-control">
+									{% if buyoneclick.status_category %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+									{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+									{% endif %}
+								</select>
+							</div>
+							<div class="col-sm-4 col-xs-12">
+								<select name="buyoneclick[status_module]" id="input-status_module" class="form-control">
+									{% if buyoneclick.status_module %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+									{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+									{% endif %}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="settings_sms" class="tab-pane fade">
+					<!-- SMS settings -->
+					<div class="col-xs-12" style="background:#fff;border: 1px solid #ddd;border-top: none;">
+						<!-- SMS.ru -->
+						<div class="col-sm-12 text-center h2">{{ smsru_form_title }}</div>
+						<div class="col-sm-12 text-center h4" style="text-transform:uppercase; padding-bottom:1em;">{{ smsru_form_subtitle }}</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="smsru_api">{{ smsru_api_title }}</label>
+							<div class="col-sm-10">
+								<input type="text" name="buyoneclick[smsru_api]" value="{{ buyoneclick.smsru_api }}" placeholder="{{ smsru_api_title }}" id="smsru_api" class="form-control" />
+							</div>
+							<div class="col-sm-offset-2 col-sm-10">
+								{{ smsru_api_tooltip }}
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smsru_login">{{ smsru_login_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smsru_login]" value="{{ buyoneclick.smsru_login }}" placeholder="{{ smsru_login_title }}" id="smsru_login" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smsru_password">{{ smsru_password_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smsru_password]" value="{{ buyoneclick.smsru_password }}" placeholder="{{ smsru_password_title }}" id="smsru_password" class="form-control" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smsru_number">{{ smsru_number_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smsru_number]" value="{{ buyoneclick.smsru_number }}" placeholder="{{ smsru_number_title }}" id="smsru_number" class="form-control" />
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smsru_number_tooltip }}
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smsru_name">{{ smsru_name_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smsru_name]" value="{{ buyoneclick.smsru_name }}" placeholder="{{ smsru_name_title }}" id="smsru_name" class="form-control" />
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smsru_name_tooltip }}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smsru_admin_sms">{{ smsru_admin_sms_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smsru_admin_sms]" value="{{ buyoneclick.smsru_admin_sms }}" placeholder="{{ smsru_admin_sms_title }}" id="smsru_admin_sms" class="form-control" />
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smsru_admin_sms_tooltip }}
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smsru_status">{{ smsru_admin_status_title }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[smsru_admin_status]" id="smsru_admin_status" class="form-control">
+											{% if buyoneclick.smsru_admin_status %}
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="0">{{ text_disabled }}</option>
+											{% else %}
+												<option value="1">{{ text_enabled }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smsru_client_sms">{{ smsru_client_sms_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smsru_client_sms]" value="{{ buyoneclick.smsru_client_sms }}" placeholder="{{ smsru_client_sms_title }}" id="smsru_client_sms" class="form-control" />
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smsru_client_sms_tooltip }}
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smsru_client_status">{{ smsru_client_status_title }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[smsru_client_status]" id="smsru_client_status" class="form-control">
+											{% if buyoneclick.smsru_client_status %}
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="0">{{ text_disabled }}</option>
+											{% else %}
+												<option value="1">{{ text_enabled }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smsru_client_status_tooltip }}
+									</div>
+								</div>
+							</div>
+						</div>
+					<hr style="border-color: #000;" />
+						<!-- SMSC.ua -->
+						<div class="col-sm-12 text-center h2" style="margin-top:0;">{{ smscua_form_title }}</div>
+						<div class="col-sm-12 text-center h4" style="text-transform:uppercase; padding-bottom:1em;">{{ smscua_form_subtitle }}</div>
+						<div class="form-group">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smscua_login">{{ smscua_login_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smscua_login]" value="{{ buyoneclick.smscua_login }}" placeholder="{{ smscua_login_title }}" id="smscua_login" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smscua_password">{{ smscua_password_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smscua_password]" value="{{ buyoneclick.smscua_password }}" placeholder="{{ smscua_password_title }}" id="smscua_password" class="form-control" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smscua_number">{{ smscua_number_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smscua_number]" value="{{ buyoneclick.smscua_number }}" placeholder="{{ smscua_number_title }}" id="smscua_number" class="form-control" />
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smscua_number_tooltip }}
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smscua_name">{{ smscua_name_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smscua_name]" value="{{ buyoneclick.smscua_name }}" placeholder="{{ smscua_name_title }}" id="smscua_name" class="form-control" />
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smscua_name_tooltip }}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smscua_admin_sms">{{ smscua_admin_sms_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smscua_admin_sms]" value="{{ buyoneclick.smscua_admin_sms }}" placeholder="{{ smscua_admin_sms_title }}" id="smscua_admin_sms" class="form-control" />
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smscua_admin_sms_tooltip }}
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smscua_admin_status">{{ smscua_admin_status_title }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[smscua_admin_status]" id="smscua_admin_status" class="form-control">
+											{% if buyoneclick.smscua_admin_status %}
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="0">{{ text_disabled }}</option>
+											{% else %}
+												<option value="1">{{ text_enabled }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smscua_client_sms">{{ smscua_client_sms_title }}</label>
+									<div class="col-sm-8">
+										<input type="text" name="buyoneclick[smscua_client_sms]" value="{{ buyoneclick.smscua_client_sms }}" placeholder="{{ smscua_client_sms_title }}" id="smscua_client_sms" class="form-control" />
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smscua_client_sms_tooltip }}
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-sm-4 control-label" for="smscua_client_status">{{ smscua_client_status_title }}</label>
+									<div class="col-sm-8">
+										<select name="buyoneclick[smscua_client_status]" id="smscua_client_status" class="form-control">
+												{% if buyoneclick.smscua_client_status %}
+												<option value="1" selected="selected">{{ text_enabled }}</option>
+												<option value="0">{{ text_disabled }}</option>
+											{% else %}
+												<option value="1">{{ text_enabled }}</option>
+												<option value="0" selected="selected">{{ text_disabled }}</option>
+											{% endif %}
+										</select>
+									</div>
+									<div class="col-sm-offset-4 col-sm-8">
+										{{ smscua_client_status_tooltip }}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End SMS settings -->
+				</div>
+				<div id="settings_analytics" class="tab-pane fade">
+					<!-- Analytics settings -->
+					<div class="col-xs-12" style="background:#fff;border: 1px solid #ddd;border-top: none;">
+						<!-- Yandex.ru -->
+						<div class="col-sm-12 text-center h2" style="margin:1em auto">{{ ya_form_title }}</div>
+						<div class="form-group">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="ya_counter">{{ ya_counter_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[ya_counter]" value="{{ buyoneclick.ya_counter }}" placeholder="{{ ya_counter_title }}" id="ya_counter" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="ya_identificator">{{ ya_identificator_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[ya_identificator]" value="{{ buyoneclick.ya_identificator }}" placeholder="{{ ya_identificator_title }}" id="ya_identificator" class="form-control" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="ya_identificator_send">{{ ya_identificator_send_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[ya_identificator_send]" value="{{ buyoneclick.ya_identificator_send }}" placeholder="{{ ya_identificator_send_title }}" id="ya_identificator_send" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="ya_identificator_success">{{ ya_identificator_success_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[ya_identificator_success]" value="{{ buyoneclick.ya_identificator_success }}" placeholder="{{ ya_identificator_success_title }}" id="ya_identificator_success" class="form-control" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<label class="col-sm-2 control-label" for="ya_target_status">{{ ya_target_status_title }}</label>
+							<div class="col-sm-10">
+								<select name="buyoneclick[ya_status]" id="ya_target_status" class="form-control">
+									{% if buyoneclick.ya_status %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+									{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+									{% endif %}
+								</select>
+							</div>
+						</div>
+					<hr style="border-color: #000;" />
+						<!-- Google.com -->
+						<div class="col-sm-12 text-center h2" style="margin:1em auto">{{ google_form_title }}</div>
+						<div class="form-group">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="google_category_btn">{{ google_category_btn_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[google_category_btn]" value="{{ buyoneclick.google_category_btn }}" placeholder="{{ google_category_btn_title }}" id="google_category_btn" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="google_action_btn">{{ google_action_btn_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[google_action_btn]" value="{{ buyoneclick.google_action_btn }}" placeholder="{{ google_action_btn_title }}" id="google_action_btn" class="form-control" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="google_category_send">{{ google_category_send_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[google_category_send]" value="{{ buyoneclick.google_category_send }}" placeholder="{{ google_category_send_title }}" id="google_category_send" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="google_action_send">{{ google_action_send_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[google_action_send]" value="{{ buyoneclick.google_action_send }}" placeholder="{{ google_action_send_title }}" id="google_action_send" class="form-control" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="google_category_success">{{ google_category_success_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[google_category_success]" value="{{ buyoneclick.google_category_success }}" placeholder="{{ google_category_success_title }}" id="google_category_success" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-xs-12">
+								<div class="row">
+									<label class="col-md-4 col-sm-12 col-xs-12 text-right" for="google_action_success">{{ google_action_success_title }}</label>
+									<div class="col-md-8 col-sm-12 col-xs-12">
+										<input type="text" name="buyoneclick[google_action_success]" value="{{ buyoneclick.google_action_success }}" placeholder="{{ google_action_success_title }}" id="google_action_success" class="form-control" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="border:none;">
+							<label class="col-sm-2 control-label" for="google_target_status">{{ google_target_status_title }}</label>
+							<div class="col-sm-10">
+								<select name="buyoneclick[google_status]" id="google_target_status" class="form-control">
+									{% if buyoneclick.google_status %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+									{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+									{% endif %}
+								</select>
+							</div>
+						</div>
+					<hr style="border-color: #000;" />
+						<!-- Extended analytics -->
+						<div class="col-sm-12 text-center h2" style="margin:1em auto">{{ exan_form_title }}</div>
+						<div class="form-group" style="border:none;">
+							<label class="col-sm-2 control-label" for="exan_status">{{ exan_status_title }}</label>
+							<div class="col-sm-10">
+								<select name="buyoneclick[exan_status]" id="exan_status" class="form-control">
+									{% if buyoneclick.exan_status %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+									{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+									{% endif %}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="text_tab_help" class="tab-pane fade">
+					<div class="col-xs-12" style="background:#fff;border: 1px solid #ddd;border-top: none;">
+						<div class="h4 text-primary" style="margin-bottom:0;">
+							<strong>{{ text_tab_help_title }}</strong>
+						</div>
+						<div class="text_help" style="margin-top:2em;">{{ text_help }}</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript"><!--
+		$('#language a:first').tab('show');
+		$('#sms_settings a:first').tab('show');
+		$('#analytics_settings a:first').tab('show');
+		//-->
+	</script>
+</div>
+{{ footer }}

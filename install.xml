@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>963-504-oc-3</code>
+	<name>XD Buy One Click for OpenCart 3.x</name>
+	<version>5.0.4</version>
+	<author><![CDATA[<span style="color:#0066cc"><b>XDomus.ru</b></span>]]></author>
+	<link>//xdomus.ru/opencart/buyoneclick-opencart-free/</link>
+	<file path="catalog/model/catalog/product.php">
+        <operation>
+            <search>
+				<![CDATA[
+					'price_prefix'            => $product_option_value['price_prefix'],
+				]]>
+			</search>
+            <add position="after">
+				<![CDATA[
+					'points'            	=> $product_option_value['points'],
+					'points_prefix'         => $product_option_value['points_prefix'],
+				]]>
+			</add>
+        </operation>
+    </file>
+	<file path="catalog/controller/common/header.php">
+		<operation>
+			<search>
+				<![CDATA[
+					$data['telephone'] = $this->config->get('config_telephone');
+				]]>
+			</search>
+			<add position="after">
+				<![CDATA[
+					$buyoneclick = $this->config->get('buyoneclick');
+					$data['buyoneclick_status_product'] = $buyoneclick["status_product"];
+					$data['buyoneclick_status_category'] = $buyoneclick["status_category"];
+					$data['buyoneclick_status_module'] = $buyoneclick["status_module"];
+
+					$data['buyoneclick_style_status'] = $buyoneclick["style_status"];
+					$data['buyoneclick_validation_type'] = $buyoneclick["validation_type"];
+
+					$data['buyoneclick_exan_status'] = $buyoneclick["exan_status"];
+
+					$data['buyoneclick_ya_status'] 					= $buyoneclick['ya_status'];
+					$data['buyoneclick_ya_counter'] 				= $buyoneclick['ya_counter'];
+					$data['buyoneclick_ya_identificator'] 			= $buyoneclick['ya_identificator'];
+					$data['buyoneclick_ya_identificator_send'] 		= $buyoneclick['ya_identificator_send'];
+					$data['buyoneclick_ya_identificator_success'] 	= $buyoneclick['ya_identificator_success'];
+
+					$data['buyoneclick_google_status'] 				= $buyoneclick['google_status'];
+					$data['buyoneclick_google_category_btn'] 		= $buyoneclick['google_category_btn'];
+					$data['buyoneclick_google_action_btn'] 			= $buyoneclick['google_action_btn'];
+					$data['buyoneclick_google_category_send'] 		= $buyoneclick['google_category_send'];
+					$data['buyoneclick_google_action_send'] 		= $buyoneclick['google_action_send'];
+					$data['buyoneclick_google_category_success'] 	= $buyoneclick['google_category_success'];
+					$data['buyoneclick_google_action_success'] 		= $buyoneclick['google_action_success'];
+				]]>
+			</add>
+		</operation>
+	</file>
+ 	<file path="catalog/view/theme/*/template/common/header.twig">
+		<operation>
+			<search>
+				<![CDATA[
+					</head>
+				]]>
+			</search>
+			<add position="before"><![CDATA[
+				{% if buyoneclick_status_product or buyoneclick_status_category or buyoneclick_status_module %}
+					<script src="catalog/view/javascript/buyoneclick.js" type="text/javascript"></script>
+					<script src="catalog/view/javascript/sourcebuster.min.js" type="text/javascript"></script>
+					<script>
+						function clickAnalytics(){
+							{% if buyoneclick_ya_status and buyoneclick_ya_counter is defined and buyoneclick_ya_counter != '' and buyoneclick_ya_identificator is defined and buyoneclick_ya_identificator != '' %}
+								yaCounter{{ buyoneclick_ya_counter }}.reachGoal('{{ buyoneclick_ya_identificator }}');
+							{% endif %}
+							{% if buyoneclick_google_status and buyoneclick_google_category_btn is defined and buyoneclick_google_category_btn != '' and buyoneclick_google_action_btn is defined and buyoneclick_google_action_btn != '' %}
+								ga('send', 'event', '{{ buyoneclick_google_category_btn }}', '{{ buyoneclick_google_action_btn }}');
+								gtag('event', '{{ buyoneclick_google_action_btn }}', {'event_category': '{{ buyoneclick_google_category_btn }}'});
+							{% endif %}
+							return true;
+						}
+						function clickAnalyticsSend(){
+							{% if buyoneclick_ya_status and buyoneclick_ya_counter is defined and buyoneclick_ya_counter != '' and buyoneclick_ya_identificator_send is defined and buyoneclick_ya_identificator_send != '' %}
+								yaCounter{{ buyoneclick_ya_counter }}.reachGoal('{{ buyoneclick_ya_identificator_send }}');
+							{% endif %}
+							{% if buyoneclick_google_status and buyoneclick_google_category_send is defined and buyoneclick_google_category_send != '' and buyoneclick_google_action_send is defined and buyoneclick_google_action_send != '' %}
+								ga('send', 'event', '{{ buyoneclick_google_category_send }}', '{{ buyoneclick_google_action_send }}');
+								gtag('event', '{{ buyoneclick_google_action_send }}', {'event_category': '{{ buyoneclick_google_category_send }}'});
+							{% endif %}
+							return true;
+						}
+						function clickAnalyticsSuccess(){
+							{% if buyoneclick_ya_status and buyoneclick_ya_counter is defined and buyoneclick_ya_counter != '' and buyoneclick_ya_identificator_success is defined and buyoneclick_ya_identificator_success != '' %}
+								yaCounter{{ buyoneclick_ya_counter }}.reachGoal('{{ buyoneclick_ya_identificator_success }}');
+							{% endif %}
+							{% if buyoneclick_google_status and buyoneclick_google_category_success is defined and buyoneclick_google_category_success != '' and buyoneclick_google_action_success is defined and buyoneclick_google_action_success != '' %}
+								ga('send', 'event', '{{ buyoneclick_google_category_success }}', '{{ buyoneclick_google_action_success }}');
+								gtag('event', '{{ buyoneclick_google_action_success }}', {'event_category': '{{ buyoneclick_google_category_success }}'});
+							{% endif %}
+							return true;
+						}
+					</script>
+					{% if buyoneclick_validation_type %}
+						<script src="catalog/view/javascript/jquery.mask.min.js" type="text/javascript"></script>
+						<script>
+							$(document).ready(function(){
+								$('#boc_phone').mask('{{ buyoneclick_validation_type }}');
+							});
+						</script>
+					{% endif %}
+					{% if buyoneclick_style_status %}
+						<link href="catalog/view/theme/default/stylesheet/buyoneclick.css" rel="stylesheet">
+					{% endif %}
+					<style type="text/css">
+						@keyframes lds-rolling {
+							0% {
+								-webkit-transform: translate(-50%, -50%) rotate(0deg);
+								transform: translate(-50%, -50%) rotate(0deg);
+							}
+							100% {
+								-webkit-transform: translate(-50%, -50%) rotate(360deg);
+								transform: translate(-50%, -50%) rotate(360deg);
+							}
+						}
+						@-webkit-keyframes lds-rolling {
+							0% {
+								-webkit-transform: translate(-50%, -50%) rotate(0deg);
+								transform: translate(-50%, -50%) rotate(0deg);
+							}
+							100% {
+								-webkit-transform: translate(-50%, -50%) rotate(360deg);
+								transform: translate(-50%, -50%) rotate(360deg);
+							}
+						}
+						.lds-rolling {
+							position: relative;
+							text-align: center;
+						}
+						.lds-rolling div, .lds-rolling div:after {
+							position: absolute;
+							width: 160px;
+							height: 160px;
+							border: 20px solid #bbcedd;
+							border-top-color: transparent;
+							border-radius: 50%;
+						}
+						.lds-rolling div {
+							-webkit-animation: lds-rolling 1s linear infinite;
+							animation: lds-rolling 1s linear infinite;
+							top: 100px;
+							left: 100px;
+						}
+						.lds-rolling div:after {
+							-webkit-transform: rotate(90deg);
+							transform: rotate(90deg);
+						}
+						.lds-rolling {
+							width: 200px !important;
+							height: 200px !important;
+							-webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+							transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+							margin: 0 auto;
+						}
+						.col-pd-15 {
+							padding-left:15px;
+							padding-right:15px;
+						}
+						.col-mb-10 {
+							margin-bottom:10px;
+						}
+						#boc_order hr {
+							margin-top:0px;
+							margin-bottom:15px;
+						}
+						.boc_product_info > div {
+							line-height: 1.25;
+						}
+						.boc_product_info > div > img {
+							max-height: 120px;
+							margin: 0 auto;
+						}
+						.boc_product_info > div > img, .boc_product_info > div > div, .boc_product_info > div > p {
+							display: inline-block;
+							line-height: normal;
+							vertical-align: middle;
+						}
+						#boc_order .checkbox {
+							margin-top: 0;
+							padding: 0 10px;
+							border: 1px solid transparent;
+							border-radius: 6px;
+						}
+						#boc_order .checkbox.has-error {
+							border-color: #a94442;
+						}
+						.input-number {
+							display: inline-block;
+							vertical-align: top;
+							white-space: nowrap;
+
+						}
+						.caption, .va_block {
+							vertical-align: middle;
+							display: inline-block;
+							font-size: 1.25em;
+							line-height: 34px;
+						}
+						.caption > .product_info {
+							line-height: 1;
+							display: inline-block;
+						}
+						.input-number > .btn-quantity {
+							text-decoration: none;
+							box-sizing: border-box;
+							border: 0;
+							cursor: pointer;
+							-webkit-touch-callout: none;
+							-webkit-user-select: none;
+							-khtml-user-select: none;
+							-moz-user-select: none;
+							-ms-user-select: none;
+							user-select: none;
+							text-align: center;
+							padding: 0;
+							display: inline-block;
+							vertical-align: middle;
+							color: #000;
+							-webkit-font-smoothing: antialiased;
+							font-size: 20px;
+							font-weight: 400;
+							text-transform: uppercase;
+							height: 21px;
+							line-height: 20px;
+							padding: 0 3px;
+						}
+						.input-number > #boc_input-quantity {
+							display: inline-block;
+							vertical-align: middle;
+							width: 26px;
+							padding: 0;
+							text-align: center;
+							background-color: transparent;
+							border: 0;
+							margin: 0;
+							color: #000;
+							font-family: 'HelveticaNeueCyr', sans-serif;
+							-webkit-font-smoothing: antialiased;
+							font-size: 18px;
+							font-weight: 400;
+							text-transform: uppercase;
+							padding-top: 3px;
+						}
+						#boc_product_options .form-group .control-label {
+							margin: 0;
+							font-weight: bold;
+						}
+						#boc_product_options .form-group .checkbox, #boc_product_options .form-group .radio {
+							margin: 2.5px 0;
+							padding-left: 2.5px;
+						}
+						#boc_order .product_options .single_option {
+							margin-top:0.5em;
+						}
+						#boc_order .product_options .option_name {
+							font-size: 0.90em;
+							font-weight: 600;
+							display: block;
+						}
+						#boc_order .product_options .option_value {
+							font-size: 0.85em;
+							display: block;
+						}
+						#boc_order .blured {
+							color: transparent;
+							text-shadow: 0 0 5px rgba(0,0,0,0.5);
+						}
+						@media (max-width: 767px) {
+							.boc_product_info > div {
+								line-height:normal;
+								text-align:center;
+							}
+						}
+					</style>
+				{% endif %}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/common/footer.php">
+		<operation>
+			<search>
+				<![CDATA[
+					$this->load->language('common/footer');
+				]]>
+			</search>
+			<add position="before"><![CDATA[
+				// BuyOneClick
+					$buyoneclick = $this->config->get('buyoneclick');
+					$data['buyoneclick_status_product'] = $buyoneclick["status_product"];
+					$data['buyoneclick_status_category'] = $buyoneclick["status_category"];
+					$data['buyoneclick_status_module'] = $buyoneclick["status_module"];
+
+					$data['buyoneclick_exan_status'] = $buyoneclick["exan_status"];
+
+					$current_language_id = $this->config->get('config_language_id');
+					$data['buyoneclick_success_field'] = isset($buyoneclick["success_field"][$current_language_id]) ? htmlspecialchars_decode($buyoneclick["success_field"][$current_language_id]) : '';
+
+					$this->load->language('extension/module/buyoneclick');
+					if ($data['buyoneclick_success_field'] == '') {
+						$data['buyoneclick_success_field'] = $this->language->get('buyoneclick_success');
+					}
+				// BuyOneClickEnd
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/*/template/common/footer.twig">
+		<operation>
+			<search>
+				<![CDATA[
+					</body>
+				]]>
+			</search>
+			<add position="before"><![CDATA[
+				{% if buyoneclick_status_product or buyoneclick_status_category or buyoneclick_status_module %}
+					<div id="boc_order" class="modal fade"></div>
+					<div id="boc_success" class="modal fade">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-body">
+									<div class="text-center">{{ buyoneclick_success_field }}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/product.php">
+		<operation>
+			<search>
+				<![CDATA[
+					$data['header'] = $this->load->controller('common/header');
+				]]>
+			</search>
+			<add position="after">
+				<![CDATA[
+				// BuyOneClick
+					$this->load->model('setting/setting');
+					$current_language_id = $this->config->get('config_language_id');
+
+					$buyoneclick = $this->config->get('buyoneclick');
+					$data['buyoneclick_name'] = isset($buyoneclick["name"][$current_language_id]) ? $buyoneclick["name"][$current_language_id] : '';
+					$data['buyoneclick_status_product'] = $buyoneclick["status_product"];
+					$data['buyoneclick_status_module'] = $buyoneclick["status_module"];
+
+					$data['buyoneclick_ya_status'] 					= $buyoneclick['ya_status'];
+					$data['buyoneclick_ya_counter'] 				= $buyoneclick['ya_counter'];
+					$data['buyoneclick_ya_identificator'] 			= $buyoneclick['ya_identificator'];
+					$data['buyoneclick_ya_identificator_send'] 		= $buyoneclick['ya_identificator_send'];
+					$data['buyoneclick_ya_identificator_success'] 	= $buyoneclick['ya_identificator_success'];
+
+					$data['buyoneclick_google_status'] 				= $buyoneclick['google_status'];
+					$data['buyoneclick_google_category_btn'] 		= $buyoneclick['google_category_btn'];
+					$data['buyoneclick_google_action_btn'] 			= $buyoneclick['google_action_btn'];
+					$data['buyoneclick_google_category_send'] 		= $buyoneclick['google_category_send'];
+					$data['buyoneclick_google_action_send'] 		= $buyoneclick['google_action_send'];
+					$data['buyoneclick_google_category_success'] 	= $buyoneclick['google_category_success'];
+					$data['buyoneclick_google_action_success'] 		= $buyoneclick['google_action_success'];
+
+					$this->load->language('extension/module/buyoneclick');
+					if (!isset($data['buyoneclick_name']) or $data['buyoneclick_name'] == '') {
+						$data['buyoneclick_name'] = $this->language->get('buyoneclick_button');
+					}
+					$data['buyoneclick_text_loading'] = $this->language->get('buyoneclick_text_loading');
+				// BuyOneClickEnd
+				]]>
+			</add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/*/template/product/product.twig">
+		<operation>
+			<search>
+				<![CDATA[
+					<button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="btn btn-primary btn-lg btn-block">{{ button_cart }}</button>
+				]]>
+			</search>
+			<add position="after">
+				<![CDATA[
+					{% if buyoneclick_status_product %}
+						<br />
+						<button type="button" data-loading-text="{{ buyoneclick_text_loading }}" class="btn btn-primary btn-lg btn-block boc_order_btn" {% if (buyoneclick_ya_status and buyoneclick_ya_counter is defined and buyoneclick_ya_counter != '' and buyoneclick_ya_identificator is defined and buyoneclick_ya_identificator != '') or (buyoneclick_google_status and buyoneclick_google_category_btn is defined and buyoneclick_google_category_btn != '' and buyoneclick_google_action_btn is defined and buyoneclick_google_action_btn != '') %} onClick="clickAnalytics(); return true;" {% endif %} data-target="#boc_order" data-product="{{ heading_title }}" data-product_id="{{ product_id }}">{{ buyoneclick_name }}</button>
+					{% endif %}
+				]]>
+			</add>
+		</operation>
+		<operation>
+			<search regex="true"><![CDATA[
+				/<div class="button-group">(.*?)<\/div>/is
+			]]></search>
+			<add position="after"><![CDATA[
+				<div class="button-group">$1</div>
+				{% if buyoneclick_status_module %}
+					<button type="button" data-loading-text="{{ buyoneclick_text_loading }}" class="btn-block boc_order_category_btn" {% if (buyoneclick_ya_status and buyoneclick_ya_counter is defined and buyoneclick_ya_counter != '' and buyoneclick_ya_identificator is defined and buyoneclick_ya_identificator != '') or (buyoneclick_google_status and buyoneclick_google_category_btn is defined and buyoneclick_google_category_btn != '' and buyoneclick_google_action_btn is defined and buyoneclick_google_action_btn != '') %} onClick="clickAnalytics(); return true;" {% endif %} data-target="#boc_order" data-product="{{ product['name'] }}" data-product_id="{{ product['product_id'] }}">{{ buyoneclick_name }}</button>
+				{% endif %}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/{category.php,manufacturer.php,search.php,special.php}">
+		<operation>
+			<search>
+				<![CDATA[
+					$data['header'] = $this->load->controller('common/header');
+				]]>
+			</search>
+			<add position="after">
+				<![CDATA[
+				// BuyOneClick
+					$this->load->model('setting/setting');
+					$current_language_id = $this->config->get('config_language_id');
+
+					$buyoneclick = $this->config->get('buyoneclick');
+					$data['buyoneclick_name'] = isset($buyoneclick["name"][$current_language_id]) ? $buyoneclick["name"][$current_language_id] : '';
+					$data['buyoneclick_status_category'] = $buyoneclick["status_category"];
+
+					$data['buyoneclick_ya_status'] 					= $buyoneclick['ya_status'];
+					$data['buyoneclick_ya_counter'] 				= $buyoneclick['ya_counter'];
+					$data['buyoneclick_ya_identificator'] 			= $buyoneclick['ya_identificator'];
+					$data['buyoneclick_ya_identificator_send'] 		= $buyoneclick['ya_identificator_send'];
+					$data['buyoneclick_ya_identificator_success'] 	= $buyoneclick['ya_identificator_success'];
+
+					$data['buyoneclick_google_status'] 				= $buyoneclick['google_status'];
+					$data['buyoneclick_google_category_btn'] 		= $buyoneclick['google_category_btn'];
+					$data['buyoneclick_google_action_btn'] 			= $buyoneclick['google_action_btn'];
+					$data['buyoneclick_google_category_send'] 		= $buyoneclick['google_category_send'];
+					$data['buyoneclick_google_action_send'] 		= $buyoneclick['google_action_send'];
+					$data['buyoneclick_google_category_success'] 	= $buyoneclick['google_category_success'];
+					$data['buyoneclick_google_action_success'] 		= $buyoneclick['google_action_success'];
+
+					$this->load->language('extension/module/buyoneclick');
+					if (!isset($data['buyoneclick_name']) or $data['buyoneclick_name'] == '') {
+						$data['buyoneclick_name'] = $this->language->get('buyoneclick_button');
+					}
+					$data['buyoneclick_text_loading'] = $this->language->get('buyoneclick_text_loading');
+				// BuyOneClickEnd
+				]]>
+			</add>
+		</operation>
+        <operation>
+            <search>
+				<![CDATA[
+					$data['breadcrumbs'] = array();
+				]]>
+			</search>
+            <add position="before">
+				<![CDATA[
+				// BuyOneClick
+					$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment.min.js');
+					$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/locales.min.js');
+					$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
+					$this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+				// BuyOneClickEnd
+				]]>
+			</add>
+        </operation>
+	</file>
+	<file path="catalog/view/theme/*/template/product/{category.twig,manufacturer_info.twig,search.twig,special.twig}">
+		<operation>
+			<search regex="true"><![CDATA[
+				/<div class="button-group">(.*?)<\/div>/is
+			]]></search>
+			<add position="after"><![CDATA[
+				<div class="button-group">$1</div>
+				{% if buyoneclick_status_category %}
+					<button type="button" data-loading-text="{{ buyoneclick_text_loading }}" class="btn-block boc_order_category_btn" {% if (buyoneclick_ya_status and buyoneclick_ya_counter is defined and buyoneclick_ya_counter != '' and buyoneclick_ya_identificator is defined and buyoneclick_ya_identificator != '') or (buyoneclick_google_status and buyoneclick_google_category_btn is defined and buyoneclick_google_category_btn != '' and buyoneclick_google_action_btn is defined and buyoneclick_google_action_btn != '') %} onClick="clickAnalytics(); return true;" {% endif %} data-target="#boc_order" data-product="{{ product['name'] }}" data-product_id="{{ product['product_id'] }}">{{ buyoneclick_name }}</button>
+				{% endif %}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/extension/module/{bestseller.php,featured.php,latest.php,special.php}">
+		<operation>
+			<search>
+				<![CDATA[
+					$data['products'] = array();
+				]]>
+			</search>
+			<add position="before">
+				<![CDATA[
+				// BuyOneClick
+					$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment.min.js');
+					$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/locales.min.js');
+					$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
+					$this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+
+					$this->load->model('setting/setting');
+					$current_language_id = $this->config->get('config_language_id');
+
+					$buyoneclick = $this->config->get('buyoneclick');
+					$data['buyoneclick_name'] = isset($buyoneclick["name"][$current_language_id]) ? $buyoneclick["name"][$current_language_id] : '';
+					$data['buyoneclick_status_module'] = $buyoneclick["status_module"];
+
+					$data['buyoneclick_ya_status'] 					= $buyoneclick['ya_status'];
+					$data['buyoneclick_ya_counter'] 				= $buyoneclick['ya_counter'];
+					$data['buyoneclick_ya_identificator'] 			= $buyoneclick['ya_identificator'];
+					$data['buyoneclick_ya_identificator_send'] 		= $buyoneclick['ya_identificator_send'];
+					$data['buyoneclick_ya_identificator_success'] 	= $buyoneclick['ya_identificator_success'];
+
+					$data['buyoneclick_google_status'] 				= $buyoneclick['google_status'];
+					$data['buyoneclick_google_category_btn'] 		= $buyoneclick['google_category_btn'];
+					$data['buyoneclick_google_action_btn'] 			= $buyoneclick['google_action_btn'];
+					$data['buyoneclick_google_category_send'] 		= $buyoneclick['google_category_send'];
+					$data['buyoneclick_google_action_send'] 		= $buyoneclick['google_action_send'];
+					$data['buyoneclick_google_category_success'] 	= $buyoneclick['google_category_success'];
+					$data['buyoneclick_google_action_success'] 		= $buyoneclick['google_action_success'];
+
+					$this->load->language('extension/module/buyoneclick');
+					if (!isset($data['buyoneclick_name']) or $data['buyoneclick_name'] == '') {
+						$data['buyoneclick_name'] = $this->language->get('buyoneclick_button');
+					}
+					$data['buyoneclick_text_loading'] = $this->language->get('buyoneclick_text_loading');
+				// BuyOneClickEnd
+				]]>
+			</add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/*/template/extension/module/{bestseller.twig,featured.twig,latest.twig,special.twig}">
+		<operation>
+			<search regex="true"><![CDATA[
+				/<div class="button-group">(.*?)<\/div>/is
+			]]></search>
+			<add position="after"><![CDATA[
+				<div class="button-group">$1</div>
+				{% if buyoneclick_status_module %}
+					<button type="button" data-loading-text="{{ buyoneclick_text_loading }}" class="btn-block boc_order_category_btn" {% if (buyoneclick_ya_status and buyoneclick_ya_counter is defined and buyoneclick_ya_counter != '' and buyoneclick_ya_identificator is defined and buyoneclick_ya_identificator != '') or (buyoneclick_google_status and buyoneclick_google_category_btn is defined and buyoneclick_google_category_btn != '' and buyoneclick_google_action_btn is defined and buyoneclick_google_action_btn != '') %} onClick="clickAnalytics(); return true;" {% endif %} data-target="#boc_order" data-product="{{ product['name'] }}" data-product_id="{{ product['product_id'] }}">{{ buyoneclick_name }}</button>
+				{% endif %}
+			]]></add>
+		</operation>
+	</file>
+</modification>
