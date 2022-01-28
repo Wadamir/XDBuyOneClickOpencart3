@@ -23,7 +23,7 @@ $_['field1_title'] 			= 'Имя';
 $_['field2_title'] 			= 'Телефон';
 $_['field3_title'] 			= 'E-mail';
 $_['field4_title'] 			= 'Комментарий';
-$_['entry_agree_status'] 			= 'Требовать согласие с ';
+$_['entry_agree_status'] 	= 'Требовать согласие с ';
 $_['field_required']   		= 'Обязательное поле';
 
 // Phone validation

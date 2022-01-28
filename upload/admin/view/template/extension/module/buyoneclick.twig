@@ -275,15 +275,15 @@
 											{% if buyoneclick.option_status == '2' %}
 												<option value="0">{{ text_option_status0 }}</option>
 												<option value="1">{{ text_option_status1 }}</option>
-												<option value="2" selected="selected">{{ text_option_status2 }}</option>
+												<option value="2" selected="selected" style="display:none">{{ text_option_status2 }}</option>
 											{% elseif buyoneclick.option_status == '1' %}
 												<option value="0">{{ text_option_status0 }}</option>
 												<option value="1" selected="selected">{{ text_option_status1 }}</option>
-												<option value="2">{{ text_option_status2 }}</option>
+												<option value="2" style="display:none">{{ text_option_status2 }}</option>
 											{% else %}
 												<option value="0" selected="selected">{{ text_option_status0 }}</option>
 												<option value="1">{{ text_option_status1 }}</option>
-												<option value="2">{{ text_option_status2 }}</option>
+												<option value="2" style="display:none">{{ text_option_status2 }}</option>
 											{% endif %}
 										</select>
 									</div>

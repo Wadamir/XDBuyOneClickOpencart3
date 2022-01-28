@@ -23,7 +23,7 @@ $_['field1_title'] 			= 'Name';
 $_['field2_title']		 	= 'Phone';
 $_['field3_title'] 			= 'E-mail';
 $_['field4_title']	 		= 'Message';
-$_['entry_agree_status'] 			= 'Required agree with ';
+$_['entry_agree_status'] 	= 'Required agree with ';
 $_['field_required']  		= 'Required';
 
 // Phone validation
@@ -45,14 +45,14 @@ $_['entry_cart_status']				= 'Offer to add items from the basket to the order';
 
 // Entry
 $_['entry_name']        			= 'Text on button';
-$_['entry_success_field'] 			= 'Modal window text';
-$_['success_field_tooltip']			= 'Using HTML tags is allowed';
-$_['entry_note_field'] 				= 'Additional text in popup window';
-$_['note_field_tooltip']			= 'Additional text will shown in popup window below products. Using HTML tags is allowed';
+$_['entry_success_field'] 			= 'Success popup window text';
+$_['success_field_tooltip']			= 'Default text: <h4>Thanks for your order!<br />We will contact you as soon as possible.</h4>. Using HTML tags is allowed';
+$_['entry_note_field'] 				= 'Additional text in main popup window';
+$_['note_field_tooltip']			= 'Additional text will shown in main popup window below products. Using HTML tags is allowed';
 
 // Success
 $_['entry_success_type']			= 'After successfully sending the order';
-$_['success_type0']					= 'Pop-up window (without redirect)';
+$_['success_type0']					= 'Success popup window (without redirect)';
 $_['success_type1']					= 'Go to the standard opencart success page - "index.php?route=checkout/success"';
 $_['success_type_tooltip']			= 'By default - popup without redirect';
 
@@ -127,7 +127,7 @@ $_['google_target_status_title']		= 'Google target status';
 
 $_['text_tab_help']					= 'HELP';
 $_['text_tab_help_title']			= 'NEED HELP?';
-$_['text_help']						= '<p><a href="//xdomus.ru/opencart/buyoneclick-opencart-free-english/" target="_blank">Module FAQ</a></p><p><a href="//xdomus.ru/technical-support/" target="_blank">Send request for module installation (25$)</a></p>';
+$_['text_help']						= '<p><a href="//xdomus.ru/opencart/buyoneclick-module-opencart-3-free-en/" target="_blank">Module FAQ</a></p><p><a href="//xdomus.ru/technical-support/" target="_blank">Send request for module installation (25$)</a></p>';
 
 // Error
 $_['error_permission'] 					= 'Warning: You do not have permission to modify "XD BuyOneClick" module!';
